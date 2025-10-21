@@ -130,6 +130,9 @@ function addClass(event) {
     renderSchedule();
     closeModal();
     event.target.reset();
+    
+    // Cập nhật thống kê sau khi thêm lịch học
+    updateStatisticsTab(); 
 
     showToast("✓ Đã thêm lịch học thành công!");
 }
@@ -181,6 +184,10 @@ function deleteClass(event, key) {
         delete scheduleData[key];
         saveData();
         renderSchedule();
+        
+        // Cập nhật thống kê sau khi xóa lịch học
+        updateStatisticsTab(); 
+        
         showToast("✓ Đã xóa lịch học!");
     }
 }
@@ -239,6 +246,9 @@ function addAssignment() {
     assignments.unshift(assignment);
     saveData();
     renderAssignments();
+    
+    // Cập nhật thống kê và biểu đồ cột
+    updateStatisticsTab(); 
 
     document.getElementById("assignSubject").value = "";
     document.getElementById("assignTitle").value = "";
@@ -280,8 +290,8 @@ function toggleAssignment(id) {
         saveData();
         renderAssignments();
         showToast(a.completed ? "✓ Đã đánh dấu hoàn thành!" : "✓ Đã bỏ đánh dấu!");
-        if (document.getElementById("statistics").classList.contains("active"))
-            updateStatisticsTab();
+ 
+        updateStatisticsTab(); 
     }
 }
 
@@ -291,8 +301,9 @@ function deleteAssignment(id) {
         saveData();
         renderAssignments();
         showToast("✓ Đã xóa bài tập!");
-        if (document.getElementById("statistics").classList.contains("active"))
-            updateStatisticsTab();
+        
+      
+        updateStatisticsTab(); 
     }
 }
 
@@ -321,18 +332,31 @@ function showToast(message) {
 
 // ===== CÀI ĐẶT =====
 function loadUserInfo() {
-    const userName = localStorage.getItem("userName") || "Dat";
-    const userRole = localStorage.getItem("userRole") || "student";
+
+    const loggedInUsername = localStorage.getItem("username"); 
+    const userName = loggedInUsername || localStorage.getItem("userName") || "Người dùng";
+    const userRole = localStorage.getItem("userRole") || "Sinh viên";
+    
     const nameInput = document.getElementById("userName");
     const roleSelect = document.getElementById("userRole");
+    
     if (nameInput) nameInput.value = userName;
     if (roleSelect) roleSelect.value = userRole;
+    
+    // Hiển thị tên người dùng trong sidebar nếu có
+    const userDisplay = document.getElementById("user-display-name");
+    if (userDisplay) userDisplay.textContent = userName;
+
     updateHeader(document.querySelector(".tab-content.active")?.id || "dashboard");
 }
 
 function saveUserInfo() {
     localStorage.setItem("userName", document.getElementById("userName").value);
     localStorage.setItem("userRole", document.getElementById("userRole").value);
+    
+    // Đồng bộ username lưu trữ (từ login) với thông tin mới
+    localStorage.setItem("username", document.getElementById("userName").value);
+    
     loadUserInfo();
     showToast("✓ Đã lưu thông tin người dùng!");
 }
@@ -456,3 +480,18 @@ function initializeDemoData() {
     }
     saveData();
 }
+
+window.switchMainTab = switchMainTab;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.addClass = addClass;
+window.editClass = editClass;
+window.deleteClass = deleteClass;
+window.addNotification = addNotification;
+window.deleteNotification = deleteNotification;
+window.addAssignment = addAssignment;
+window.toggleAssignment = toggleAssignment;
+window.deleteAssignment = deleteAssignment;
+window.toggleNotification = toggleNotification;
+window.saveUserInfo = saveUserInfo;
+window.clearAllData = clearAllData;
