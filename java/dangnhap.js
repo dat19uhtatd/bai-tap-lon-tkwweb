@@ -1,35 +1,38 @@
 document.getElementById("loginForm").addEventListener("submit", function(event) {
-  event.preventDefault(); // Ngăn tải lại trang
+  event.preventDefault(); 
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // Danh sách tài khoản mẫu
-  const accounts = [
-    { email: "admin@gmail.com", password: "123456", role: "Quản trị viên" },
-    { email: "sv001", password: "sv001", role: "Sinh viên 1" },
-    { email: "sv002", password: "sv002", role: "Sinh viên 2" },
-    { email: "user@gmail.com", password: "abc123", role: "Người dùng" },
-    {email: "phantiendatka2006@gmail.com", password: "123456", role: "Người dùng"}
-  ];
-
-  // Kiểm tra tài khoản
-  const found = accounts.find(acc => acc.email === email && acc.password === password);
-
-  if (found) {
-    alert("Đăng nhập thành công!\nXin chào " + found.role);
-
-    // Lưu thông tin người dùng tạm thời trong localStorage
-    localStorage.setItem("username", found.role);
-
-    // Chuyển sang trang chủ
-    window.location.href = "trangchu.html";
-  } else {
-    alert("Sai tài khoản hoặc mật khẩu. Vui lòng thử lại!");
+  
+  if (!email || !password) {
+    alert("Vui lòng nhập đầy đủ Email/Mã sinh viên và Mật khẩu!");
+    return;
   }
+  
+  
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+
+  
+  if (!passwordRegex.test(password)) {
+    alert("Mật khẩu không đáp ứng yêu cầu:\n- Phải có ít nhất 6 ký tự.\n- Phải chứa ít nhất một chữ hoa (A-Z).\n- Phải chứa ít nhất một chữ thường (a-z).\n- Phải chứa ít nhất một chữ số (0-9).");
+    return;
+  }
+
+ 
+  
+  const defaultRole = email.includes('@') ? email : 'Sinh viên ' + email; 
+
+  alert("Đăng nhập thành công!\nXin chào " + defaultRole);
+
+  
+  localStorage.setItem("username", defaultRole);
+
+  
+  window.location.href = "trangchu.html";
 });
 
-// Ẩn/hiện mật khẩu
+
 function togglePassword() {
   const passwordInput = document.getElementById("password");
   const eyeIcon = document.getElementById("eyeIcon");
