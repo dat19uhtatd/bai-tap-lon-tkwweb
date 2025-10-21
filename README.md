@@ -112,7 +112,7 @@ npx http-server -p 8000
 
 ---
 
-**Cách 4:** Nhấn vào link này: http://127.0.0.1:5500/dangnhap.html
+**Cách 4:** Nhấn vào link này: https://bai-tap-lon-tkwweb.vercel.app/
 
 
 ---
