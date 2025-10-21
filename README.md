@@ -144,14 +144,7 @@ npx http-server -p 8000
 - Theo dõi các chỉ số tổng quan
 
 ---
-### 5. Một số tài khoản mẫu để đăng nhập:
-| STT | Email                                                                 | Mật khẩu | Vai trò           |
-| :-: | :-------------------------------------------------------------------- | :------: | :---------------- |
-|  1  | **[admin@gmail.com](mailto:admin@gmail.com)**                         |  123456  |  Quản trị viên |
-|  2  | **sv001**                                                             |   sv001  |  Sinh viên 1    |
-|  3  | **sv002**                                                             |   sv002  |  Sinh viên 2    |
-|  4  | **[user@gmail.com](mailto:user@gmail.com)**                           |  abc123  |  Người dùng     |
-|  5  | **[phantiendatka2006@gmail.com](mailto:phantiendatka2006@gmail.com)** |  123456  |  Người dùng     |
+
 
 
 
