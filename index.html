@@ -1,247 +1,124 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Lịch Học</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/trangchu.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Nhập - Quản Lý Lịch Học</title>
+
+  <link rel="stylesheet" href="css/dangnhap.css">
 </head>
 <body>
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <img src="images/Screenshot 2025-10-18 003652.png" alt="Logo">
-                </div>
-                <h2>QL Lịch Học</h2>
-            </div>
-            <ul class="menu">
-                <li class="active" onclick="switchMainTab('dashboard', this)">
-                    <img src="images/home-icon.png" alt="Trang chủ" class="menu-icon-img">
-                    <span>Trang chủ</span>
-                </li>
-                <li onclick="switchMainTab('schedule', this)">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Thời khóa biểu</span>
-                </li>
-                <li onclick="switchMainTab('assignments', this)">
-                    <img src="images/homework-icon.png" alt="Bài tập" class="menu-icon-img">
-                    <span>Bài tập</span>
-                </li>
-                <li onclick="switchMainTab('statistics', this)">
-                    <img src="images/Screenshot 2025-10-21 004651.png" alt="Bài tập" class="menu-icon-img">
-                    <span>Thống kê</span>
-                </li>
-                <li onclick="switchMainTab('settings', this)">
-                    <i class="fas fa-cog"></i>
-                    <span>Cài đặt</span>
-                </li>
-            </ul>
-            <a href="dangnhap.html" target="_self">
-                <button class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                </button>
-            </a>
-        </aside>
+  <div class="login-container">
+    <div class="login-left">
+      <div class="logo">
+        <img src="images/Screenshot 2025-10-18 003652.png" alt="Logo">
+      </div>
 
-        <main class="main-content">
-            <header class="header">
-                <div class="header-left">
-                    <h1 id="main-title-text">👋 Hello, I'm Dat!</h1>
-                    <p class="typing-effect" id="typing-subtitle">Welcome to my timetable! 🚀</p>
-                </div>
-                <button class="add-schedule-btn" id="add-schedule-btn" onclick="openModal()">
-                    <i class="fas fa-plus"></i> Thêm Lịch
-                </button>
-            </header>
+      <h1>Quản Lý Lịch Học</h1>
+      <p>Hệ thống quản lý thời khóa biểu thông minh, giúp bạn theo dõi lịch học hiệu quả</p>
 
-            <div class="content">
-                <div id="dashboard" class="tab-content active">
-                    <div class="notification-form">
-                        <h3><i class="fas fa-bell"></i> Thêm Thông Báo Mới</h3>
-                        <div class="form-grid">
-                            <input type="text" id="notifTitle" placeholder="Tiêu đề thông báo">
-                            <input type="date" id="notifDate">
-                            <button onclick="addNotification()">
-                                <i class="fas fa-plus-circle"></i> Thêm Thông Báo
-                            </button>
-                        </div>
-                    </div>
-                    <div class="notifications-grid" id="notificationsList"></div>
-                </div>
-
-                <div id="schedule" class="tab-content">
-                    <div class="timetable-wrapper">
-                        <table class="timetable">
-                            <thead>
-                                <tr>
-                                    <th><i class="fas fa-clock"></i> Giờ học</th>
-                                    <th><i class="fas fa-calendar-day"></i> Thứ 2</th>
-                                    <th><i class="fas fa-calendar-day"></i> Thứ 3</th>
-                                    <th><i class="fas fa-calendar-day"></i> Thứ 4</th>
-                                    <th><i class="fas fa-calendar-day"></i> Thứ 5</th>
-                                    <th><i class="fas fa-calendar-day"></i> Thứ 6</th>
-                                    <th><i class="fas fa-calendar-day"></i> Thứ 7</th>
-                                    <th><i class="fas fa-calendar-day"></i> Chủ nhật</th>
-                                </tr>
-                            </thead>
-                            <tbody id="scheduleBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="assignments" class="tab-content">
-                    <div class="assignment-form">
-                        <h3><i class="fas fa-pencil-alt"></i> Thêm Bài Tập Mới</h3>
-                        <div class="form-grid">
-                            <input type="text" id="assignSubject" placeholder="Môn học">
-                            <input type="text" id="assignTitle" placeholder="Tên bài tập">
-                            <input type="date" id="assignDeadline">
-                            <button onclick="addAssignment()">
-                                <i class="fas fa-plus-circle"></i> Thêm
-                            </button>
-                        </div>
-                    </div>
-                    <div class="assignments-grid" id="assignmentsList"></div>
-                </div>
-                
-                <div id="statistics" class="tab-content">
-                    <div class="stats-grid">
-                        <div class="stat-card stat-total-classes">
-                            <i class="fas fa-calendar-check stat-icon"></i>
-                            <div class="stat-info">
-                                <span class="stat-value" id="totalClasses">0</span>
-                                <span class="stat-label">Tổng số Lịch học</span>
-                            </div>
-                        </div>
-                        <div class="stat-card stat-completed-tasks">
-                            <i class="fas fa-check-circle stat-icon"></i>
-                            <div class="stat-info">
-                                <span class="stat-value" id="completedTasks">0</span>
-                                <span class="stat-label">Bài tập Hoàn thành</span>
-                            </div>
-                        </div>
-                        <div class="stat-card stat-pending-tasks">
-                            <i class="fas fa-exclamation-triangle stat-icon"></i>
-                            <div class="stat-info">
-                                <span class="stat-value" id="pendingTasks">0</span>
-                                <span class="stat-label">Bài tập Cần làm</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="dashboard-charts-grid">
-                        <div class="chart-container-wrapper chart-assignments">
-                            <h3 class="section-title"><i class="fas fa-tasks"></i> Thống kê Bài tập theo Môn</h3>
-                            <div class="chart-container">
-                                <canvas id="assignmentChart"></canvas>
-                            </div>
-                        </div>
-
-                        <div class="chart-container-wrapper chart-day-distribution">
-                            <h3 class="section-title"><i class="fas fa-chart-pie"></i> Phân bổ Lớp theo Ngày</h3>
-                            <div class="chart-container">
-                                <canvas id="dayDistributionChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                
-                <div id="settings" class="tab-content">
-                    <div class="settings-group">
-                        <h2><i class="fas fa-user-circle"></i> Thông Tin Cá Nhân</h2>
-                        <div class="setting-item">
-                            <label for="userName">Tên người dùng:</label>
-                            <input type="text" id="userName" value="Dat">
-                        </div>
-                        <div class="setting-item">
-                            <label for="userRole">Vai trò:</label>
-                            <select id="userRole">
-                                <option value="student">Sinh viên</option>
-                                <option value="teacher">Giáo viên</option>
-                            </select>
-                        </div>
-                        <button onclick="saveUserInfo()" class="setting-save-btn">
-                            <i class="fas fa-save"></i> Lưu Thông Tin
-                        </button>
-                    </div>
-        
-                    <div class="settings-group">
-                        <h2><i class="fas fa-bell"></i> Cài Đặt Thông Báo</h2>
-                        <div class="setting-item switch-item">
-                            <label for="notificationToggle">Bật Thông Báo Desktop:</label>
-                            <label class="switch">
-                                <input type="checkbox" id="notificationToggle" onchange="toggleNotification()">
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <p class="setting-description">Kích hoạt để nhận thông báo khi có bài tập sắp đến hạn.</p>
-                    </div>
-                    
-                    <div class="settings-group">
-                        <h2><i class="fas fa-eraser"></i> Xóa Dữ Liệu</h2>
-                        <button onclick="clearAllData()" class="setting-clear-btn">
-                            <i class="fas fa-trash-alt"></i> Xóa Toàn Bộ Dữ Liệu Cục Bộ
-                        </button>
-                        <p class="setting-description warning">Hành động này sẽ xóa toàn bộ lịch học, bài tập, và thông báo đã lưu trữ trên trình duyệt của bạn. (Không thể hoàn tác)</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal" id="addModal">
-                <div class="modal-content">
-                    <h2><i class="fas fa-plus-circle"></i> Thêm Lịch Học Mới</h2>
-                    <form onsubmit="addClass(event)">
-                        <div class="form-group">
-                            <label><i class="far fa-calendar-alt"></i> Ngày học</label>
-                            <select id="classDay" required>
-                                <option value="">-- Chọn Ngày --</option>
-                                <option>Thứ 2</option>
-                                <option>Thứ 3</option>
-                                <option>Thứ 4</option>
-                                <option>Thứ 5</option>
-                                <option>Thứ 6</option>
-                                <option>Thứ 7</option>
-                                <option>Chủ nhật</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="far fa-clock"></i> Thời gian</label>
-                            <select id="classTime" required>
-                                <option value="">-- Chọn Giờ --</option>
-                                <option>07:00 - 08:30</option>
-                                <option>08:45 - 10:15</option>
-                                <option>10:30 - 12:00</option>
-                                <option>13:00 - 14:30</option>
-                                <option>14:45 - 16:15</option>
-                                <option>16:30 - 18:00</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-book"></i> Môn học</label>
-                            <input type="text" id="classSubject" required placeholder="VD: Toán">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-door-open"></i> Phòng học</label>
-                            <input type="text" id="classRoom" required placeholder="VD: A101">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-chalkboard-teacher"></i> Giáo viên</label>
-                            <input type="text" id="classTeacher" placeholder="VD: Nguyễn Văn A">
-                        </div>
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-check-circle"></i> Thêm Lịch
-                        </button>
-                    </form>
-                </div>
-            </div>
-            
-            <div id="toast" class="toast"></div>
-        </main>
+      <div class="features">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+            </svg>
+          </div>
+          <span>Theo dõi lịch học theo tuần</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+            </svg>
+          </div>
+          <span>Nhận thông báo nhắc nhở</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <span>Quản lý bài tập và deadline</span>
+        </div>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-    <script src="java/trangchu.js"></script>
+    <div class="login-right">
+      <div class="login-header">
+        <h2>Chào mừng trở lại!</h2>
+        <p>Đăng nhập để tiếp tục quản lý lịch học của bạn</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email hoặc Mã sinh viên</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            </div>
+            <input type="text" id="email" placeholder="Nhập email hoặc mã sinh viên" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mật khẩu</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+              </svg>
+            </div>
+            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+            <button type="button" class="password-toggle" onclick="togglePassword()">
+              <svg id="eyeIcon" viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <div class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">Ghi nhớ đăng nhập</label>
+          </div>
+          <a href="quenmk.html" target="_self" class="forgot-password">Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" class="login-button">Đăng Nhập</button>
+
+        <div class="divider">Hoặc đăng nhập với</div>
+
+        <div class="social-login">
+                    <button type="button" class="social-button">
+                        <svg viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Google
+                    </button>
+                    <button type="button" class="social-button">
+                        <svg viewBox="0 0 24 24">
+                            <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                </div>
+
+        <div class="signup-link">
+          Chưa có tài khoản? <a href="dangki.html" target="_self">Đăng ký ngay</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liên kết file JS -->
+  <script src="java/dangnhap.js"></script>
 </body>
 </html>
