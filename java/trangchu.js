@@ -29,6 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") closeModal();
     });
+
+    // Kiểm tra bài tập sắp hết hạn khi vào trang
+    checkUpcomingAssignments();
 });
 
 // ===== LOAD & SAVE DATA =====
@@ -69,10 +72,10 @@ function updateHeader(tabId) {
     const titleElement = document.getElementById("main-title-text");
     const addButton = document.getElementById("add-schedule-btn");
 
-    titleElement.style.opacity = 0; // Hiệu ứng fade-out nhanh
+    titleElement.style.opacity = 0;
     setTimeout(() => {
         addButton.style.display = "none";
-        titleElement.innerHTML = ""; // Xóa nội dung cũ
+        titleElement.innerHTML = "";
 
         switch (tabId) {
             case "dashboard":
@@ -97,7 +100,7 @@ function updateHeader(tabId) {
                 break;
         }
 
-        titleElement.style.opacity = 1; // Fade-in
+        titleElement.style.opacity = 1;
     }, 150);
 }
 
@@ -130,10 +133,7 @@ function addClass(event) {
     renderSchedule();
     closeModal();
     event.target.reset();
-    
-    // Cập nhật thống kê sau khi thêm lịch học
-    updateStatisticsTab(); 
-
+    updateStatisticsTab();
     showToast("✓ Đã thêm lịch học thành công!");
 }
 
@@ -184,10 +184,7 @@ function deleteClass(event, key) {
         delete scheduleData[key];
         saveData();
         renderSchedule();
-        
-        // Cập nhật thống kê sau khi xóa lịch học
-        updateStatisticsTab(); 
-        
+        updateStatisticsTab();
         showToast("✓ Đã xóa lịch học!");
     }
 }
@@ -246,9 +243,7 @@ function addAssignment() {
     assignments.unshift(assignment);
     saveData();
     renderAssignments();
-    
-    // Cập nhật thống kê và biểu đồ cột
-    updateStatisticsTab(); 
+    updateStatisticsTab();
 
     document.getElementById("assignSubject").value = "";
     document.getElementById("assignTitle").value = "";
@@ -290,8 +285,7 @@ function toggleAssignment(id) {
         saveData();
         renderAssignments();
         showToast(a.completed ? "✓ Đã đánh dấu hoàn thành!" : "✓ Đã bỏ đánh dấu!");
- 
-        updateStatisticsTab(); 
+        updateStatisticsTab();
     }
 }
 
@@ -301,9 +295,7 @@ function deleteAssignment(id) {
         saveData();
         renderAssignments();
         showToast("✓ Đã xóa bài tập!");
-        
-      
-        updateStatisticsTab(); 
+        updateStatisticsTab();
     }
 }
 
@@ -332,18 +324,16 @@ function showToast(message) {
 
 // ===== CÀI ĐẶT =====
 function loadUserInfo() {
-
-    const loggedInUsername = localStorage.getItem("username"); 
+    const loggedInUsername = localStorage.getItem("username");
     const userName = loggedInUsername || localStorage.getItem("userName") || "Người dùng";
     const userRole = localStorage.getItem("userRole") || "Sinh viên";
-    
+
     const nameInput = document.getElementById("userName");
     const roleSelect = document.getElementById("userRole");
-    
+
     if (nameInput) nameInput.value = userName;
     if (roleSelect) roleSelect.value = userRole;
-    
-    // Hiển thị tên người dùng trong sidebar nếu có
+
     const userDisplay = document.getElementById("user-display-name");
     if (userDisplay) userDisplay.textContent = userName;
 
@@ -353,10 +343,7 @@ function loadUserInfo() {
 function saveUserInfo() {
     localStorage.setItem("userName", document.getElementById("userName").value);
     localStorage.setItem("userRole", document.getElementById("userRole").value);
-    
-    // Đồng bộ username lưu trữ (từ login) với thông tin mới
     localStorage.setItem("username", document.getElementById("userName").value);
-    
     loadUserInfo();
     showToast("✓ Đã lưu thông tin người dùng!");
 }
@@ -381,6 +368,7 @@ function toggleNotification() {
     } else showToast("✕ Thông báo desktop đã tắt.");
 }
 
+// ===== XÓA DỮ LIỆU =====
 function clearAllData() {
     if (confirm("⚠️ Xóa toàn bộ dữ liệu?")) {
         localStorage.clear();
@@ -401,15 +389,9 @@ function clearAllData() {
 }
 
 // ===== THỐNG KÊ =====
-function calculateTotalClasses() {
-    return Object.keys(scheduleData).length;
-}
-function calculateCompletedTasks() {
-    return assignments.filter(a => a.completed).length;
-}
-function calculatePendingTasks() {
-    return assignments.filter(a => !a.completed).length;
-}
+function calculateTotalClasses() { return Object.keys(scheduleData).length; }
+function calculateCompletedTasks() { return assignments.filter(a => a.completed).length; }
+function calculatePendingTasks() { return assignments.filter(a => !a.completed).length; }
 
 function updateStatisticsTab() {
     document.getElementById("totalClasses").textContent = calculateTotalClasses();
@@ -463,35 +445,69 @@ function initializeDemoData() {
     if (Object.keys(scheduleData).length === 0) {
         scheduleData = {
             "Thứ 2-07:00 - 08:30": { subject: "Lập trình Web", room: "B301", teacher: "ThS. Trần Văn B", day: "Thứ 2", time: "07:00 - 08:30" },
-            "Thứ 3-08:45 - 10:15": { subject: "Cơ sở dữ liệu", room: "A102", teacher: "PGS.TS. Lê Văn C", day: "Thứ 3", time: "08:45 - 10:15" }
+            "Thứ 3-08:45 - 10:15": { subject: "Cơ sở dữ liệu", room: "A102", teacher: "PGS.TS. Lê Văn C", day: "Thứ 3", time: "08:45 - 10:15" },
+            "Thứ 5-08:45 - 10:15": { subject: "Thiết kế web", room: "A102", teacher: "PGS.TS. Lê Văn D", day: "Thứ 5", time: "08:45 - 10:15" }
         };
+
     }
     if (!notifications.length) {
         notifications = [
             { id: Date.now(), title: "Họp lớp quan trọng", date: "2025-10-25" },
-            { id: Date.now() + 1, title: "Nộp báo cáo cuối kỳ", date: "2025-10-30" }
+            { id: Date.now() + 1, title: "Đăng ký học kỳ mới", date: "2025-10-28" }
         ];
     }
     if (!assignments.length) {
         assignments = [
-            { id: Date.now(), subject: "Lập trình Web", title: "Bài tập form đăng ký", deadline: "2025-10-22", completed: false },
-            { id: Date.now() + 1, subject: "Cơ sở dữ liệu", title: "Thiết kế ERD", deadline: "2025-10-25", completed: false }
+            { id: Date.now(), subject: "Toán rời rạc", title: "Bài tập chương 3", deadline: "2025-10-24", completed: false },
+            { id: Date.now() + 1, subject: "Lập trình C", title: "Báo cáo đồ án", deadline: "2025-10-26", completed: true }, // ⚠ dấu ,
+            { id: Date.now() + 2, subject: "Toán rời rạc", title: "Ôn tập kiểm tra", deadline: "2025-10-27", completed: true },
+            { id: Date.now() + 3, subject: "Lập trình hướng đối tượng", title: "Báo cáo đồ án", deadline: "2025-10-28", completed: true }
         ];
+
     }
     saveData();
 }
 
+// ===== THÔNG BÁO TỰ ĐỘNG =====
+function checkUpcomingAssignments() {
+    const notificationEnabled = localStorage.getItem("notificationEnabled") === "true";
+    if (!notificationEnabled || !("Notification" in window)) return;
+    const now = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+    assignments.forEach(a => {
+        const deadline = new Date(a.deadline + "T00:00:00");
+        const diff = deadline - now;
+        if (!a.completed && diff > 0 && diff < 24 * 60 * 60 * 1000) {
+            showDesktopNotification("🕒 Sắp đến hạn nộp bài!", `Bài tập "${a.title}" (${a.subject}) sẽ hết hạn vào ${formatDate(a.deadline)}.`);
+        }
+    });
+}
+
+function showDesktopNotification(title, body) {
+    if (Notification.permission === "granted") {
+        new Notification(title, { body, icon: "images/notify-icon.png" });
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(p => {
+            if (p === "granted") new Notification(title, { body });
+        });
+    }
+}
+
+const oldAddAssignment = addAssignment;
+addAssignment = function () {
+    oldAddAssignment();
+    const notificationEnabled = localStorage.getItem("notificationEnabled") === "true";
+    if (notificationEnabled) showDesktopNotification("📝 Đã thêm bài tập mới", "Bạn vừa thêm một bài tập mới!");
+};
+
+const oldAddNotification = addNotification;
+addNotification = function () {
+    oldAddNotification();
+    const notificationEnabled = localStorage.getItem("notificationEnabled") === "true";
+    if (notificationEnabled) showDesktopNotification("🔔 Thông báo mới", "Một thông báo mới vừa được thêm.");
+};
+
+setInterval(checkUpcomingAssignments, 60 * 60 * 1000);
+
 window.switchMainTab = switchMainTab;
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.addClass = addClass;
-window.editClass = editClass;
-window.deleteClass = deleteClass;
-window.addNotification = addNotification;
-window.deleteNotification = deleteNotification;
-window.addAssignment = addAssignment;
-window.toggleAssignment = toggleAssignment;
-window.deleteAssignment = deleteAssignment;
-window.toggleNotification = toggleNotification;
-window.saveUserInfo = saveUserInfo;
-window.clearAllData = clearAllData;
