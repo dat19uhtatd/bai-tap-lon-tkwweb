@@ -42,9 +42,8 @@ function hideAlert() {
   alertBox.style.display = "none";
 }
 
-// Hàm lưu dữ liệu vào memory (có thể mở rộng để lưu vào database)
+// Hàm lưu dữ liệu vào bộ nhớ tạm
 function saveUserData(userData) {
-  // Lưu vào array trong memory
   if (!window.registeredUsers) {
     window.registeredUsers = [];
   }
@@ -87,20 +86,17 @@ confirmPasswordInput.addEventListener("input", function() {
 
 // Xử lý submit form
 form.addEventListener("submit", function(e) {
-  e.preventDefault(); // Ngăn gửi form mặc định
+  e.preventDefault();
   
-  // Ẩn thông báo cũ
   hideAlert();
   passwordError.textContent = "";
   
-  // Lấy dữ liệu từ form
   const fullname = document.getElementById("fullname").value.trim();
   const username = document.getElementById("username").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
   
-  // Lấy giới tính (radio button)
   const genderRadios = document.querySelectorAll('input[name="gender"]');
   let gender = "";
   for (const radio of genderRadios) {
@@ -114,7 +110,7 @@ form.addEventListener("submit", function(e) {
   const language = document.getElementById("language").value;
   const organization = document.getElementById("organization").value.trim();
   
-  // Validate các trường bắt buộc
+  
   if (!username) {
     showAlert("❌ Vui lòng nhập tên truy cập!", "error");
     document.getElementById("username").focus();
@@ -139,35 +135,30 @@ form.addEventListener("submit", function(e) {
     return;
   }
   
-  // Validate định dạng email
   if (!isValidEmail(email)) {
     showAlert("❌ Địa chỉ email không hợp lệ!", "error");
     document.getElementById("email").focus();
     return;
   }
   
-  // Kiểm tra username đã tồn tại
   if (isUsernameTaken(username)) {
     showAlert("❌ Tên truy cập đã được sử dụng!", "error");
     document.getElementById("username").focus();
     return;
   }
   
-  // Kiểm tra email đã tồn tại
   if (isEmailTaken(email)) {
     showAlert("❌ Email đã được đăng ký!", "error");
     document.getElementById("email").focus();
     return;
   }
   
-  // Kiểm tra độ mạnh mật khẩu
   if (!isStrongPassword(password)) {
     showAlert("⚠️ Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số!", "warning");
     document.getElementById("password").focus();
     return;
   }
   
-  // Kiểm tra mật khẩu khớp
   if (password !== confirmPassword) {
     passwordError.textContent = "❌ Mật khẩu xác nhận không khớp!";
     showAlert("❌ Mật khẩu xác nhận không khớp!", "error");
@@ -175,12 +166,12 @@ form.addEventListener("submit", function(e) {
     return;
   }
   
-  // Tạo object userData
+  
   const userData = {
     fullname: fullname || "Không có",
     username: username,
     email: email,
-    password: password, // Trong thực tế nên mã hóa
+    password: password,
     gender: gender || "Không xác định",
     timezone: timezone,
     language: language,
@@ -188,13 +179,12 @@ form.addEventListener("submit", function(e) {
     registeredAt: new Date().toLocaleString('vi-VN')
   };
   
-  // Lưu dữ liệu
+ 
   saveUserData(userData);
-  
-  // Hiển thị thông báo thành công
+
   showAlert(`✅ Đăng ký thành công! Xin chào, ${username}!`, "success");
   
-  // Log thông tin ra console
+
   console.log("=== THÔNG TIN ĐĂNG KÝ ===");
   console.log("Họ và tên:", userData.fullname);
   console.log("Tên truy cập:", userData.username);
@@ -206,15 +196,12 @@ form.addEventListener("submit", function(e) {
   console.log("Thời gian đăng ký:", userData.registeredAt);
   console.log("========================");
   
-  // Reset form sau 2.5 giây
+ 
   setTimeout(() => {
-    form.reset();
-    hideAlert();
-    passwordError.textContent = "";
-  }, 2500);
+    window.location.href = "dangnhap.html";
+  }, 2000);
 });
 
-// Thêm hiệu ứng focus cho các input
 const inputs = document.querySelectorAll('input, select');
 inputs.forEach(input => {
   input.addEventListener('focus', function() {
@@ -228,6 +215,5 @@ inputs.forEach(input => {
   });
 });
 
-// Log khi script được load
-console.log("✓ Script dangnhap.js đã được tải thành công!");
+console.log("✓ Script dangki.js đã được tải thành công!");
 console.log("Sẵn sàng xử lý đăng ký người dùng.");
